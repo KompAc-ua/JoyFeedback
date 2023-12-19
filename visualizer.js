@@ -63,7 +63,7 @@ const fftSize = 32;
             if(vol > 0.03) {
                 vibro(vol.toFixed(2), vol.toFixed(2));
 
-                console.log(vol.toFixed(2));
+                // console.log(vol.toFixed(2));
             }
             
         }

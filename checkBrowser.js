@@ -1,4 +1,4 @@
-let checkBrowser = null;
+let checkBrowser = 0;
 window.addEventListener("load", () => {
   // CHROME
   if (navigator.userAgent.indexOf("Chrome") != -1 ) {
@@ -7,12 +7,12 @@ window.addEventListener("load", () => {
   }
   // FIREFOX
   else if (navigator.userAgent.indexOf("Firefox") != -1 ) {
-    checkBrowser = 0;
+    checkBrowser = 2;
     console.log("Mozilla Firefox");
   }
   // INTERNET EXPLORER
   else if (navigator.userAgent.indexOf("MSIE") != -1 ) {
-    checkBrowser = 3;
+    checkBrowser = 1;
     console.log("Internet Exploder");
   }
   // EDGE
