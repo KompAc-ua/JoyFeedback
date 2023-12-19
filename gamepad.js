@@ -13,13 +13,21 @@ window.addEventListener("gamepadconnected", (event) => {
 function vibro(weak, strong) {
     if(initializationGamepad === 1){
         let gamepad = navigator.getGamepads()[0];
-        gamepad.vibrationActuator.playEffect("dual-rumble", 
-        {
-            startDelay: 0,
-            duration: 300,
-            weakMagnitude: weak,
-            strongMagnitude: strong,
-        })
+        if(checkBrowser = 1){
+          gamepad.vibrationActuator.playEffect("dual-rumble", 
+          {
+              startDelay: 0,
+              duration: 300,
+              weakMagnitude: weak,
+              strongMagnitude: strong,
+          })
+        } else if (checkBrowser = 0) {
+          gamepad.hapticActuators[0].pulse(weak*strong/2, 300);
+          
+        } else {
+          alert("Not supported browser");
+        }
+        
         console.log("vibro");
     } else console.log("Gamepad not connected");    
 };
