@@ -1,7 +1,7 @@
 function main(){
     const canvas = document.getElementById('myCanvas');
     const ctx = canvas.getContext('2d');
-    canvas.width = 512;
+    canvas.width = 256;
     canvas.height = 128;
 
     class Bar {
@@ -15,7 +15,7 @@ function main(){
         }
         update(micInput){
             // this.height = micInput * 140;
-            const sound = micInput * 140;
+            const sound = micInput * 200;
             if(sound > this.height/5){
                 this.height = sound;
             } else{
@@ -24,12 +24,12 @@ function main(){
         }
         draw(context){
             context.fillStyle = this.color;
-            context.fillRect(this.x, this.y, this.width, this.height);
+            context.fillRect(this.x, this.y, this.width, -this.height);
 
     
         }
     }
-const fftSize = 32;
+const fftSize = 128;
     const microphone = new Microphone(fftSize); //initialization microphone
     // console.log(microphone);
     let bars = [];
@@ -37,8 +37,8 @@ const fftSize = 32;
 
     function createBars(){
         for(let i = 0; i < (fftSize/2); i++){
-            let color = 'hsl(' + i * 2 + ', 100%, 50%)';
-            bars.push(new Bar(i * barWidth, canvas.height/2, 1, 100, color))
+            let color = 'hsl(' + i * 1 + ', 100%, 50%)';
+            bars.push(new Bar(i * barWidth, canvas.height, canvas.width/fftSize, canvas.height, color))
         }
     }
     
@@ -68,8 +68,10 @@ const fftSize = 32;
             
         }
         
-        requestAnimationFrame(animate);
+        // requestAnimationFrame(animate);
     }
-    animate();
+    // animate();
+    // setInterval(animate, 15);
+    let worker = new Worker("worker.js"); //worker for update in background
+    worker.onmessage = animate;
 }
-
