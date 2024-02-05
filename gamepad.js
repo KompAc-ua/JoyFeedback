@@ -1,5 +1,7 @@
 let initializationGamepad = 0;
 let gp = null;
+let multiplier = 1;
+
 window.addEventListener("gamepadconnected", (event) => {
     initializationGamepad = 1;
     console.log("A gamepad connected:");
@@ -12,6 +14,15 @@ window.addEventListener("gamepadconnected", (event) => {
   });
   
 function vibro(weak, strong) {
+  weak = weak * multiplier;
+  strong = strong * multiplier;
+  if (weak > 1.0){
+    weak = 1.0;
+  }
+  if (strong > 1.0){
+    strong = 1.0;
+  }
+  // console.log("weak: ",weak, "strong: ",strong, "multiplier: ",multiplier);
     if(initializationGamepad === 1){
         let gamepad = navigator.getGamepads()[0];
         if(checkBrowser === 1){
@@ -41,4 +52,11 @@ function vibro(weak, strong) {
     } else console.log("Gamepad not connected");    
 };
 
-document.querySelector('#vibro').addEventListener('click', e => vibro(1.0, 1.0));
+const changeMultiplier = async (e)=>{
+  const multiplierEl = document.querySelector('#multiplier');
+  multiplier = multiplierEl.value;
+  // console.log("Change multiplier: ",multiplier);
+}
+
+document.querySelector('#vibro').addEventListener('click', e => vibro(1, 1));
+document.querySelector('#multiplier').addEventListener('change', e=>{changeMultiplier(e)}); //Work with changes multiplier

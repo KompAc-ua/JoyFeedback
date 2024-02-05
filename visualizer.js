@@ -60,7 +60,7 @@ const fftSize = 128;
                 bar.draw(ctx);
                 // console.log(samples[i]);
             })
-            if(vol > 0.03) {
+            if(vol > 0.05) {
                 vibro(vol.toFixed(2), vol.toFixed(2));
 
                 // console.log(vol.toFixed(2));
