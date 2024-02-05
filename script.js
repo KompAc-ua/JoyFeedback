@@ -14,6 +14,8 @@ let audioSource;
 let analyser;
 let dataArray;
 let bufferLength;
+let timer;
+let worker2;
 
 const getMicStream = async()=>{
     try{
@@ -103,8 +105,29 @@ const changeAudioInput = async (e)=>{
     // }
 }
 
+function startmVibro() {
+    // timer = setTimeout(
+    //     startmVibro, 200);
+    //     console.log("Timer");
+    //     vibro(1.0, 1.0);
+
+    worker2 = new Worker("worker2.js"); //worker for update in background
+    worker2.onmessage = () => {
+        vibro(1.0, 1.0, 1000);
+    };
+    console.log("Start Vibro");
+    
+}
+
+function stopmVibro (){
+    // clearTimeout(timer);
+    worker2.terminate();
+    console.log("Stop Vibro");
+}
 
 
 document.querySelector('#record').addEventListener('click', e=>getMicStream(e));
 document.querySelector('#stop').addEventListener('click', e=>stopRec(e));
 document.querySelector('#device').addEventListener('change', e=>{changeAudioInput(e)});
+document.querySelector('#mVibro').addEventListener('click', e=>startmVibro(e));
+document.querySelector('#StopmVibro').addEventListener('click', e=>stopmVibro(e));

@@ -13,7 +13,7 @@ window.addEventListener("gamepadconnected", (event) => {
     console.log(event.gamepad);
   });
   
-function vibro(weak, strong) {
+function vibro(weak, strong, durationValue) {
   weak = weak * multiplier;
   strong = strong * multiplier;
   if (weak > 1.0){
@@ -29,7 +29,7 @@ function vibro(weak, strong) {
           gamepad.vibrationActuator.playEffect("dual-rumble", 
           {
               startDelay: 0,
-              duration: 200,
+              duration: durationValue,
               weakMagnitude: weak,
               strongMagnitude: strong,
           })
@@ -58,5 +58,5 @@ const changeMultiplier = async (e)=>{
   // console.log("Change multiplier: ",multiplier);
 }
 
-document.querySelector('#vibro').addEventListener('click', e => vibro(1, 1));
+document.querySelector('#vibro').addEventListener('click', e => vibro(1.0, 1.0, 200));
 document.querySelector('#multiplier').addEventListener('change', e=>{changeMultiplier(e)}); //Work with changes multiplier

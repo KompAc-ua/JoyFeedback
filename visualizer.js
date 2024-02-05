@@ -61,7 +61,7 @@ const fftSize = 128;
                 // console.log(samples[i]);
             })
             if(vol > 0.05) {
-                vibro(vol.toFixed(2), vol.toFixed(2));
+                vibro(vol.toFixed(2), vol.toFixed(2), 200);
 
                 // console.log(vol.toFixed(2));
             }
