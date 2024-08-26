@@ -45,7 +45,7 @@ const fftSize = 128;
     createBars();
     // console.log(bars);
     
-    function animate(){
+   function animate(){
         if(microphone.initialized){
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             // console.log('animate');
@@ -61,9 +61,12 @@ const fftSize = 128;
                 // console.log(samples[i]);
             })
             if(vol > 0.05) {
-                vibro(vol.toFixed(2), vol.toFixed(2), 200);
-
-                // console.log(vol.toFixed(2));
+                if (document.getElementById("gamepadcheckbox").checked == true) vibro(vol.toFixed(2), vol.toFixed(2), 200);
+                
+                if (document.getElementById("serialportcheckbox").checked == true) {
+                    if(document.getElementById('manualvolt').value == 0) writeInPortChange(vol.toFixed(2)*255);
+                        else writeInPortChange(document.getElementById('manualvolt').value); 
+                }
             }
             
         }

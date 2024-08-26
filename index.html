@@ -23,7 +23,37 @@
         </select>
         <button id="mVibro">mVibro</button>
         <button id="StopmVibro">StopmVibro</button>
+        <button id="SelectPort">Select Port</button>
+        <select id="OffOn">
+          <option value="0">Off</option>
+          <option value="255">On</option>
+        </select>
+        <input type="range" min="0" max="255" step="1" value="0" id="manualvolt"> 
+        <span id="showmanualvolt">0</span>
+        <input type="text" id="baudrate" list="baudList" style="width: 10ch;" onclick="this.value = '' "onchange="localStorage.baudrate = this.value" value="115200">
+          <datalist id="baudList">
+            <option value="110">110</option>
+            <option value="300">300</option>
+            <option value="600">600</option>
+            <option value="1200">1200</option>
+            <option value="2400">2400</option>
+            <option value="4800">4800</option>
+            <option value="9600">9600</option>
+            <option value="14400">14400</option>
+            <option value="19200">19200</option>
+            <option value="38400">38400</option>
+            <option value="57600">57600</option>
+            <option value="115200">115200</option>
+            <option value="128000">128000</option>
+            <option value="256000">256000</option>
+          </datalist>
+          
+          <input type="checkbox" id="gamepadcheckbox" name="Gamepad" value="yes">
+          <label for="gamepadcheckbox">Gamepad</label>
+          <input type="checkbox" id="serialportcheckbox" name="SerialPort" value="yes">
+          <label for="serialportcheckbox">SerialPort</label>
       </div>
+      
       <div>
         <canvas id='myCanvas'></canvas>
       </div>
@@ -33,4 +63,5 @@
 <script type="text/javascript" src="microphone.js"></script>
 <script type="text/javascript" src="visualizer.js"></script>
 <script type="text/javascript" src="gamepad.js"></script>
+<script type="text/javascript" src="serialport.js"></script>
 </html>

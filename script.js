@@ -16,6 +16,8 @@ let dataArray;
 let bufferLength;
 let timer;
 let worker2;
+const gamepadCheckbox = document.querySelector("#gamepadcheckbox");
+const serialPortCheckbox = document.querySelector("#serialportcheckbox");
 
 const getMicStream = async()=>{
     try{
@@ -124,10 +126,13 @@ function stopmVibro (){
     worker2.terminate();
     console.log("Stop Vibro");
 }
-
+function manualVolt(){
+    document.getElementById('showmanualvolt').innerText = document.getElementById('manualvolt').value;
+}
 
 document.querySelector('#record').addEventListener('click', e=>getMicStream(e));
 document.querySelector('#stop').addEventListener('click', e=>stopRec(e));
 document.querySelector('#device').addEventListener('change', e=>{changeAudioInput(e)});
 document.querySelector('#mVibro').addEventListener('click', e=>startmVibro(e));
 document.querySelector('#StopmVibro').addEventListener('click', e=>stopmVibro(e));
+document.querySelector('#manualvolt').addEventListener('change', e=>manualVolt(e));
