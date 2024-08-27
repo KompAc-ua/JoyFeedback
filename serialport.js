@@ -49,5 +49,10 @@ const lineHistory = [];
         }
     }
 
+    async function appendToTerminal(newStuff) {
+        console.log(newStuff);
+        
+    }
+
 document.querySelector('#SelectPort').addEventListener('click', e=>connectSerial(e));
 document.querySelector('#OffOn').addEventListener('change', e=>{writeInPortChange(document.getElementById("OffOn").value)});
