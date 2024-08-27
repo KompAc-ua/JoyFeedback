@@ -27,7 +27,6 @@ const lineHistory = [];
         dataToSend = Math.round(volume) * document.getElementById("multiplier").value;
         if(dataToSend >= 255) dataToSend = 255;
         dataToSend = dataToSend + "\n";
-        console.log(dataToSend);
         await writer.write(dataToSend);
     }
 
