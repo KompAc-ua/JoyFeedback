@@ -130,6 +130,26 @@ function manualVolt(){
     document.getElementById('showmanualvolt').innerText = document.getElementById('manualvolt').value;
 }
 
+// async function sendRequest(value) {
+//     const requestOptions = {
+//         method: 'POST',
+//         headers: {
+//         //   'Sec-Fetch-Mode': 'no-cors', // Установите желаемый режим
+//           // Другие заголовки, если нужно
+//           'Content-Type': 'application/json'
+//         },
+//         mode: 'no-cors',
+//         body: JSON.stringify({
+//             volume: value,
+//           })
+//         // body: "Данные которые нужно передать"
+//       };
+//     const post = await fetch("http://192.168.178.33", requestOptions)
+//     .then(res => console.log(res))
+//     .catch((error) => console.error("Fetch error:", error)); // In case of an error, it will be captured and logged.
+    
+// }
+
 document.querySelector('#record').addEventListener('click', e=>getMicStream(e));
 document.querySelector('#stop').addEventListener('click', e=>stopRec(e));
 document.querySelector('#device').addEventListener('change', e=>{changeAudioInput(e)});

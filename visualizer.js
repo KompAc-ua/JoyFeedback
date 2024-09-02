@@ -67,6 +67,9 @@ const fftSize = 128;
                     if(document.getElementById('manualvolt').value == 0) writeInPortChange(vol.toFixed(2)*255);
                         else writeInPortChange(document.getElementById('manualvolt').value); 
                 }
+                if(document.getElementById("wifi").checked == true){
+                    if(document.getElementById('manualvolt').value == 0) sendRequest(vol.toFixed(2)*255);
+                } else sendRequest(document.getElementById('manualvolt').value); 
             }
             
         }
