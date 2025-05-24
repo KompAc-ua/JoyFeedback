@@ -48,17 +48,33 @@
             <option value="256000">256000</option>
           </datalist>
           
-          <input type="checkbox" id="gamepadcheckbox" name="Gamepad" value="yes">
-          <label for="gamepadcheckbox">Gamepad</label>
-          <input type="checkbox" id="serialportcheckbox" name="SerialPort" value="yes">
-          <label for="serialportcheckbox">SerialPort</label>
-          <input type="checkbox" id="wifi" name="WiFi" value="yes">
-          <label for="serialportcheckbox">WiFi</label>
+          <div class="left-aligned">
+            <div>
+              <input type="checkbox" id="gamepadcheckbox" name="Gamepad" value="yes">
+              <label for="gamepadcheckbox">Gamepad</label>
+            </div>
+          
+            <div>
+              <input type="checkbox" id="serialportcheckbox" name="SerialPort" value="yes">
+              <label for="serialportcheckbox">SerialPort</label>
+            </div>
+            
+            <div>
+              <input type="checkbox" id="wifi" name="WiFi" value="yes">
+              <label for="wifi">WiFi</label>
+            </div>
+            
+          </div>
+          
           <button id="sendrequest">SendRequest</button>
       </div>
       
       <div>
         <canvas id='myCanvas'></canvas>
+        <canvas id="peakCanvas" width="256" height="100"></canvas>
+      </div>
+      <div>
+        <span id="showTextVolume">Volume to send: 0</span>
       </div>
 </body>
 <script type="text/javascript" src="checkBrowser.js"></script>

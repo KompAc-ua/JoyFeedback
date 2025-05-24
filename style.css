@@ -1,8 +1,219 @@
-*{
+/* Общие стили */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1a1a1a;
+    color: #ffffff;
     margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
 }
-canvas{
-    background: black;
+
+/* Заголовок */
+h1, div:first-child {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #00ccff;
+}
+
+/* Стили для div (по умолчанию центрирование) */
+div {
+    width: 100%;
+    max-width: 600px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Стили для div с левым выравниванием */
+div.left-aligned {
+    width: 100%; /* Занимает всю ширину родителя */
+    max-width: 600px; /* Соответствует другим div */
+    justify-content: flex-start; /* Выравнивание по левому краю */
+    flex-direction: column; /* Чекбоксы друг под другом */
+    align-items: flex-start; /* Гарантирует левое выравнивание вложенных элементов */
+    padding-left: 0; /* Убираем отступ слева, так как выравнивание контролируется */
+}
+
+/* Стили для вложенных div внутри left-aligned */
+div.left-aligned > div {
+    display: flex;
+    align-items: center; /* Чекбокс и метка выравниваются по вертикали */
+    gap: 5px; /* Отступ между чекбоксом и меткой */
+    width: 100%; /* Занимает всю ширину контейнера */
+    justify-content: flex-start; /* Убедимся, что чекбокс и метка начинаются слева */
+}
+
+/* Стили для кнопок */
+button {
+    background-color: #00ccff;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #0099cc;
+    transform: scale(1.05);
+}
+
+button:active {
+    background-color: #006699;
+}
+
+/* Стили для выпадающих списков */
+select {
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border: 1px solid #00ccff;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+select:focus {
+    outline: none;
+    border-color: #66e0ff;
+}
+
+/* Стили для ползунка */
+input[type="range"] {
+    -webkit-appearance: none;
+    width: 150px;
+    height: 8px;
+    background: #2c2c2c;
+    border-radius: 5px;
+    outline: none;
+    transition: background 0.3s;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #00ccff;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: #66e0ff;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #00ccff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+    background: #66e0ff;
+}
+
+/* Стили для текстовых полей */
+input[type="text"] {
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border: 1px solid #00ccff;
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100px;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #66e0ff;
+}
+
+/* Стили для чекбоксов */
+input[type="checkbox"] {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background-color: #2c2c2c;
+    border: 2px solid #00ccff;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #00ccff;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '✔';
+    color: #ffffff;
+    position: absolute;
+    top: 0;
+    left: 2px;
+    font-size: 12px;
+}
+
+label {
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+/* Стили для canvas */
+canvas {
+    border: 2px solid #00ccff;
+    border-radius: 5px;
+    background-color: #000000;
+    box-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+    margin: 10px 0;
+    display: block;
+}
+
+/* Стили для текста громкости */
+#showTextVolume, #showmanualvolt {
+    font-size: 14px;
+    color: #00ccff;
+    margin-left: 10px;
+    display: block;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    div {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    div.left-aligned {
+        align-items: flex-start; /* Левое выравнивание на мобильных */
+        padding-left: 0;
+    }
+
+    div.left-aligned > div {
+        width: 100%;
+    }
+
+    button, select, input[type="text"] {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    canvas {
+        width: 100%;
+        max-width: 256px;
+    }
 }

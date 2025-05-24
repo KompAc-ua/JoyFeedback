@@ -5,9 +5,14 @@ const webSocket = new WebSocket('http://192.168.178.33:81');
 function sendRequest(volume){
     // console.log(webSocket.readyState);
     dataToSend = Math.round(volume) * document.getElementById("multiplier").value;
-    if(dataToSend > 255) dataToSend = 255;
+    if(document.getElementById('manualvolt').value == 0) {
+        if(dataToSend > 255) dataToSend = 255;
+        if(dataToSend < 114) dataToSend = 114; // Минимальное значение для отправки
+    } else dataToSend = document.getElementById('manualvolt').value;
+
     if(webSocket.readyState == 1) webSocket.send(dataToSend)
         else console.log("WebSocket not connected");
+    document.getElementById('showTextVolume').innerText = "Volume to send: " + dataToSend;
 }
 
 
