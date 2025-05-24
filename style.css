@@ -92,6 +92,7 @@ select:focus {
 
 /* Стили для ползунка */
 input[type="range"] {
+    appearance: none;
     -webkit-appearance: none;
     width: 150px;
     height: 8px;
