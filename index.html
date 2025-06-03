@@ -28,8 +28,6 @@
           <option value="0">Off</option>
           <option value="255">On</option>
         </select>
-        <input type="range" min="0" max="255" step="1" value="0" id="manualvolt"> 
-        <span id="showmanualvolt">0</span>
         <input type="text" id="baudrate" list="baudList" style="width: 10ch;" onclick="this.value = '' "onchange="localStorage.baudrate = this.value" value="115200">
           <datalist id="baudList">
             <option value="110">110</option>
@@ -47,6 +45,8 @@
             <option value="128000">128000</option>
             <option value="256000">256000</option>
           </datalist>
+          <input type="range" min="0" max="255" step="1" value="0" id="manualvolt"> 
+          <span id="showmanualvolt">0</span>
           
           <div class="left-aligned">
             <div>

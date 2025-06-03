@@ -188,8 +188,10 @@ canvas {
 #showTextVolume, #showmanualvolt {
     font-size: 14px;
     color: #00ccff;
-    margin-left: 10px;
+    margin-left: 20px;
+    /* padding-left: 20px; */
     display: block;
+    /* background-color: aqua; */
 }
 
 /* Адаптивность */

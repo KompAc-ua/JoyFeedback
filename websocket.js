@@ -7,7 +7,7 @@ function sendRequest(volume){
     dataToSend = Math.round(volume) * document.getElementById("multiplier").value;
     if(document.getElementById('manualvolt').value == 0) {
         if(dataToSend > 255) dataToSend = 255;
-        if(dataToSend < 114) dataToSend = 114; // Минимальное значение для отправки
+        if(dataToSend < 114) dataToSend = 100; // Минимальное значение для отправки
     } else dataToSend = document.getElementById('manualvolt').value;
 
     if(webSocket.readyState == 1) webSocket.send(dataToSend)
