@@ -24,8 +24,15 @@ function vibro(weak, strong, durationValue) {
   }
   // console.log("weak: ",weak, "strong: ",strong, "multiplier: ",multiplier);
     if(initializationGamepad === 1){
-        let gamepad = navigator.getGamepads()[0];
-        if(checkBrowser === 1){
+        const gamepad = navigator.getGamepads().find(gp => gp && gp.connected);
+        if (!gamepad) {
+          console.log("Gamepad not connected or not detected");
+          return;
+        }
+        try{
+
+        if(gamepad.vibrationActuator && gamepad.vibrationActuator.type === "dual-rumble") {
+          // Chromium-based browsers (Chrome, Edge, Opera, Yandex)
           gamepad.vibrationActuator.playEffect("dual-rumble", 
           {
               startDelay: 0,
@@ -33,23 +40,21 @@ function vibro(weak, strong, durationValue) {
               weakMagnitude: weak,
               strongMagnitude: strong,
           })
-        } else if (checkBrowser === 2) {
-          
+        } else if (gamepad.hapticActuators && gamepad.hapticActuators.length > 0) {
+          // Firefox
           gamepad.hapticActuators[0].pulse(0.5, 300);
-          // gamepad.vibrationActuator.playEffect("vibro",
-          // {
-          //   startDelay: 0,
-          //     duration: 300,
-          //     weakMagnitude: weak,
-          //     strongMagnitude: strong,
-          // });
           
         } else {
           alert("Not supported browser");
         }
+      } catch (error) {console.error("Vibration error:", error);
+        alert("Vibration error: " + error.message);
+      }
+      
         
         // console.log("vibro");
-    } else console.log("Gamepad not connected");    
+    } else console.log("Gamepad not connected");
+      
 };
 
 const changeMultiplier = async (e)=>{
@@ -60,3 +65,13 @@ const changeMultiplier = async (e)=>{
 
 document.querySelector('#vibro').addEventListener('click', e => vibro(1.0, 1.0, 200));
 document.querySelector('#multiplier').addEventListener('change', e=>{changeMultiplier(e)}); //Work with changes multiplier
+
+// Poll for gamepad state to handle already-connected gamepads
+// function checkGamepad() {
+//   const gamepad = navigator.getGamepads().find(gp => gp && gp.connected);
+//   initializationGamepad = gamepad ? 1 : 0;
+//   console.log("Gamepad connected:", initializationGamepad);
+// }
+
+// checkGamepad();
+// setInterval(checkGamepad, 1000); // Check every second

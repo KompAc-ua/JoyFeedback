@@ -136,7 +136,7 @@ input[type="text"] {
     padding: 8px;
     border-radius: 5px;
     font-size: 14px;
-    width: 100px;
+    max-width: 70px;
 }
 
 input[type="text"]:focus {
@@ -197,7 +197,7 @@ canvas {
 /* Адаптивность */
 @media (max-width: 600px) {
     div {
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
     }
 
@@ -210,13 +210,52 @@ canvas {
         width: 100%;
     }
 
-    button, select, input[type="text"] {
+    button, select {
         width: 100%;
         max-width: 200px;
+    }
+    input[type="text"]{
+        width: 65px;
     }
 
     canvas {
         width: 100%;
         max-width: 256px;
     }
+    #OffOn{
+        max-width: fit-content;
+    margin-left: auto;
+    margin-right: 10px; /* Небольшой отступ между OffOn и SelectPort */
+}
+}
+
+#vibro, #sendrequest {
+  margin-left: auto;
+  width: 120px; /* Set a fixed width */
+  height: 40px; /* Set a fixed height */
+  padding: 8px; /* Optional: Adjust padding for better text fit */
+  box-sizing: border-box; /* Ensures padding is included in width/height */
+  text-align: center; /* Center text inside buttons */
+}
+#baudrate{
+    margin-left: 0;
+    margin-right: 10px; /* Небольшой отступ между baudrate и SelectPort */
+}
+#OffOn{
+    margin-left: auto;
+    margin-right: 10px; /* Небольшой отступ между OffOn и SelectPort */
+}
+#SelectPort{
+    margin-left: 0;
+    width: 120px; /* Set a fixed width */
+    height: 40px; /* Set a fixed height */
+    padding: 8px; /* Optional: Adjust padding for better text fit */
+    box-sizing: border-box; /* Ensures padding is included in width/height */
+    text-align: center; /* Center text inside buttons */
+}
+.bordered-div {
+  border: 1px solid rgb(29, 68, 100);
+  padding: 10px;
+  box-sizing: border-box;
+  flex-wrap: nowrap; /* Запрещаем перенос элементов на новую строку */
 }
