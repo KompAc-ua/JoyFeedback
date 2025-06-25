@@ -20,4 +20,4 @@ function sendRequest(volume){
 
 
 document.querySelector('#sendrequest').addEventListener('click', e=>sendRequest(255));
-document.querySelector('#wifi').addEventListener('change', e=>{webSocket = new WebSocket('ws://192.168.178.33:81')});
+document.querySelector('#wifi').addEventListener('change', e=>{webSocket = new WebSocket('wss://192.168.178.33/ws')});
