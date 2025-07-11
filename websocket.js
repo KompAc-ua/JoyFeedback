@@ -1,23 +1,92 @@
-// const webSocket = new WebSocket('http://192.168.178.33:81');
-let webSocket = null;
+let webSocket = null;         // Переменная для хранения объекта WebSocket
+let reconnectTimeout = null;  // Таймер для переподключения
 
-// console.log(webSocket.readyState);
+// Функция для инициализации WebSocket соединения
+function initWebSocket() {
+    // Если есть старое соединение — закрываем его
+    if (webSocket) {
+        webSocket.close();
+        webSocket = null;
+    }
 
-function sendRequest(volume){
-    if(!webSocket || document.getElementById("wifi").checked == false) return;
-    // console.log(webSocket.readyState);
-    dataToSend = Math.round(volume) * document.getElementById("multiplier").value;
-    if(document.getElementById('manualvolt').value == 0) {
-        if(dataToSend > 255) dataToSend = 255;
-        if(dataToSend < 90) dataToSend = 90; // Минимальное значение для отправки
-    } else dataToSend = document.getElementById('manualvolt').value;
+    // Проверяем, включён ли чекбокс WiFi, если нет — не подключаемся
+    if (!document.getElementById("wifi").checked) return;
 
-    if(webSocket.readyState == 1) webSocket.send(dataToSend)
-        else console.log("WebSocket not connected");
+    // Создаём новое WebSocket соединение по адресу сервера
+    webSocket = new WebSocket('wss://192.168.178.33/ws');
+
+    // Обработчик успешного подключения
+    webSocket.onopen = () => {
+        document.getElementById('showTextVolume').innerText = "WebSocket connected";
+    };
+
+    // Обработчик закрытия соединения
+    webSocket.onclose = () => {
+        document.getElementById('showTextVolume').innerText = "WebSocket disconnected";
+
+        // Если чекбокс WiFi всё ещё включён, запускаем попытку переподключения через 3 секунды
+        if (document.getElementById("wifi").checked) {
+            reconnectTimeout = setTimeout(() => {
+                initWebSocket();
+            }, 3000);
+        }
+    };
+
+    // Обработчик ошибок WebSocket
+    webSocket.onerror = () => {
+        document.getElementById('showTextVolume').innerText = "WebSocket error";
+    };
+}
+
+// Функция отправки данных по WebSocket
+function sendRequest(volume) {
+    // Проверяем, что WebSocket существует и WiFi включён
+    if (!webSocket || !document.getElementById("wifi").checked) return;
+
+    // Получаем множитель из поля ввода, если оно пустое или некорректное — используем 1
+    const multiplier = Number(document.getElementById("multiplier").value) || 1;
+    let dataToSend = Math.round(volume) * multiplier;
+
+    // Если задано ручное значение напряжения (manualvolt) — используем его
+    if (Number(document.getElementById('manualvolt').value) === 0) {
+        // Ограничиваем значение в диапазоне [90, 255]
+        if (dataToSend > 255) dataToSend = 255;
+        if (dataToSend < 100) dataToSend = 100;
+    } else {
+        dataToSend = Number(document.getElementById('manualvolt').value);
+    }
+
+    // Отправляем данные, если WebSocket готов к отправке
+    if (webSocket.readyState === WebSocket.OPEN) {
+        webSocket.send(dataToSend);
+    } else {
+        console.log("WebSocket not connected");
+    }
+
+    // Обновляем отображаемый статус с отправляемым значением
     document.getElementById('showTextVolume').innerText = "Volume to send: " + dataToSend;
 }
 
+// Обработчик нажатия кнопки отправки — посылает максимальное значение (255)
+document.querySelector('#sendrequest').addEventListener('click', () => sendRequest(255));
 
+// Обработчик изменения состояния чекбокса WiFi
+document.querySelector('#wifi').addEventListener('change', () => {
+    // Если была запущена попытка переподключения — отменяем её
+    if (reconnectTimeout) {
+        clearTimeout(reconnectTimeout);
+        reconnectTimeout = null;
+    }
 
-document.querySelector('#sendrequest').addEventListener('click', e=>sendRequest(255));
-document.querySelector('#wifi').addEventListener('change', e=>{webSocket = new WebSocket('wss://192.168.178.33/ws')});
+    if (document.getElementById("wifi").checked) {
+        // Если чекбокс включён — инициализируем WebSocket соединение
+        initWebSocket();
+    } else {
+        // Если выключен — закрываем соединение и меняем статус
+        if (webSocket) {
+            webSocket.close();
+            webSocket = null;
+        }
+        document.getElementById('showTextVolume').innerText = "WebSocket disconnected";
+    }
+});
