@@ -61,65 +61,69 @@ const fftSize = 128;
     // console.log(bars);
 
     function drawPeakGraph(peakVolume) {
-        // Очищаем весь peakCanvas
-        peakCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-        peakCtx.fillRect(0, 0, peakCanvas.width, peakCanvas.height);
+    const multiplier = Number(document.getElementById("multiplier").value) || 1;
+    const scaledPeak = peakVolume * multiplier;
+    const scaledMax = maxPeak * multiplier;
 
-        // Рисуем вертикальную шкалу (слева)
-        peakCtx.fillStyle = 'white';
-        peakCtx.font = '10px Arial';
-        peakCtx.textAlign = 'right';
-        peakCtx.textBaseline = 'middle';
-        const scaleValues = [0, 0.25, 0.5, 0.75, 1.0]; // Значения для шкалы
-        const graphHeight = peakCanvas.height - 20; // Высота графика (оставляем место для текста)
-        const graphY = 10; // Отступ сверху для текста
+    // Очищаем peakCanvas
+    peakCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+    peakCtx.fillRect(0, 0, peakCanvas.width, peakCanvas.height);
 
-        scaleValues.forEach(value => {
-            const y = graphY + graphHeight - value * graphHeight; // Позиция по Y
-            peakCtx.fillText(value.toFixed(2), 25, y); // Метка слева
-            peakCtx.beginPath();
-            peakCtx.moveTo(30, y);
-            peakCtx.lineTo(35, y); // Линия шкалы
-            peakCtx.strokeStyle = 'gray';
-            peakCtx.stroke();
-        });
+    // Вертикальная шкала от 0 до 255 (без учета multiplier)
+    peakCtx.fillStyle = 'white';
+    peakCtx.font = '10px Arial';
+    peakCtx.textAlign = 'right';
+    peakCtx.textBaseline = 'middle';
 
-        // Рисуем горизонтальную шкалу (снизу, опционально)
-        peakCtx.textAlign = 'center';
-        for (let x = 50; x < peakCanvas.width; x += 50) {
-            peakCtx.fillText(`${x / 50}s`, x, peakCanvas.height - 5); // Временные метки (примерно в секундах)
-            peakCtx.beginPath();
-            peakCtx.moveTo(x, graphY + graphHeight);
-            peakCtx.lineTo(x, graphY + graphHeight + 5);
-            peakCtx.stroke();
-        }
+    const scaleValues = [0, 64, 128, 192, 255];
+    const graphHeight = peakCanvas.height - 20;
+    const graphY = 10;
 
-        // Рисуем линию графика
+    scaleValues.forEach(value => {
+        const y = graphY + graphHeight - (value / 255) * graphHeight;
+        peakCtx.fillText(value.toFixed(0), 25, y);
         peakCtx.beginPath();
-        peakCtx.strokeStyle = 'cyan';
-        peakCtx.lineWidth = 2;
-
-        for (let i = 0; i < peakHistory.length; i++) {
-            const x = i + 35; // Сдвиг вправо для шкалы
-            const y = graphY + graphHeight - peakHistory[i] * graphHeight;
-            if (i === 0) {
-                peakCtx.moveTo(x, y);
-            } else {
-                peakCtx.lineTo(x, y);
-            }
-        }
+        peakCtx.moveTo(30, y);
+        peakCtx.lineTo(35, y);
+        peakCtx.strokeStyle = 'gray';
         peakCtx.stroke();
+    });
 
-        // Отображаем текущую и максимальную громкость
-        peakCtx.fillStyle = 'yellow';
-        peakCtx.textAlign = 'right';
-        peakCtx.textBaseline = 'top';
-        const currentPeakText = `Peak: ${peakVolume.toFixed(2)}`;
-        const maxPeakText = `Max: ${maxPeak.toFixed(2)}`;
-        peakCtx.fillText(currentPeakText, peakCanvas.width - 5, 2);
-        peakCtx.fillText(maxPeakText, peakCanvas.width - 5, 16);
+    // Горизонтальная шкала
+    peakCtx.textAlign = 'center';
+    for (let x = 50; x < peakCanvas.width; x += 50) {
+        peakCtx.fillText(`${x / 50}s`, x, peakCanvas.height - 5);
+        peakCtx.beginPath();
+        peakCtx.moveTo(x, graphY + graphHeight);
+        peakCtx.lineTo(x, graphY + graphHeight + 5);
+        peakCtx.stroke();
     }
-    
+
+    // График пиковой громкости (масштабируем значения, но не шкалу)
+    peakCtx.beginPath();
+    peakCtx.strokeStyle = 'cyan';
+    peakCtx.lineWidth = 2;
+
+    for (let i = 0; i < peakHistory.length; i++) {
+        const x = i + 35;
+        const scaledValue = peakHistory[i] * 255 * multiplier;
+        const y = graphY + graphHeight - (scaledValue / 255) * graphHeight;
+        if (i === 0) {
+            peakCtx.moveTo(x, y);
+        } else {
+            peakCtx.lineTo(x, y);
+        }
+    }
+    peakCtx.stroke();
+
+    // Текущая и максимальная громкость
+    peakCtx.fillStyle = 'yellow';
+    peakCtx.textAlign = 'right';
+    peakCtx.textBaseline = 'top';
+    peakCtx.fillText(`Peak: ${(scaledPeak * 255).toFixed(0)}`, peakCanvas.width - 5, 2);
+    peakCtx.fillText(`Max: ${(scaledMax * 255).toFixed(0)}`, peakCanvas.width - 5, 16);
+}
+
    function animate(){
         if(microphone.initialized){
             ctx.clearRect(0, 0, canvas.width, canvas.height);
