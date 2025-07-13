@@ -121,10 +121,15 @@ function startmVibro() {
                 if(document.getElementById('manualvolt').value == 0) writeInPortChange(255);
                 else writeInPortChange(document.getElementById('manualvolt').value);
             }
-            if (document.getElementById("wifi").checked == true){
+            if (document.getElementById("wifi").checked == true && document.getElementById("mVibro").style.backgroundColor != "red") {
             
                 if(document.getElementById('manualvolt').value == 0) sendRequest(255);
                 else sendRequest(document.getElementById('manualvolt').value);
+            } else{
+                let led = (Number(document.getElementById("manualvolt").value) + Number(document.getElementById("manualvolt2").value))/2;
+                let motor1 = document.getElementById("manualvolt").value;
+                let motor2 = document.getElementById("manualvolt2").value;
+                sendRequestJson(led, motor1, motor2);
             }
         
         }

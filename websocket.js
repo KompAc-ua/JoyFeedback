@@ -66,6 +66,22 @@ function sendRequest(volume) {
     // Обновляем отображаемый статус с отправляемым значением
     document.getElementById('showTextVolume').innerText = "Volume to send: " + dataToSend;
 }
+function sendRequestJson(led, motor1, motor2) {
+    if (!webSocket || !document.getElementById("wifi").checked) return;
+    // Ограничиваем значения в диапазоне [0, 255]
+    jsonDataToSend = {
+        led: Math.max(0, Math.min(255, led)),
+        motor1: Math.max(0, Math.min(255, motor1)),
+        motor2: Math.max(0, Math.min(255, motor2))
+    };
+    if (webSocket.readyState === WebSocket.OPEN) {
+        webSocket.send(JSON.stringify(jsonDataToSend));
+        document.getElementById('showTextVolume').innerText = `Sent JSON: ${JSON.stringify(jsonDataToSend)}`;
+    } else {
+        console.log("WebSocket not connected");
+        document.getElementById('showTextVolume').innerText = "WebSocket not connected";
+    }
+}
 
 // Обработчик нажатия кнопки отправки — посылает максимальное значение (255)
 document.querySelector('#sendrequest').addEventListener('click', () => sendRequest(255));
