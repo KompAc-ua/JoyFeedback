@@ -185,7 +185,7 @@ canvas {
 }
 
 /* Стили для текста громкости */
-#showTextVolume, #showmanualvolt {
+#showTextVolume, #showmanualvolt, #showinterval, #showmanualvolt2 {
     font-size: 14px;
     color: #00ccff;
     margin-left: 20px;
@@ -229,7 +229,7 @@ canvas {
 }
 }
 
-#vibro, #sendrequest {
+#gamepadVibro, #sendrequest {
   margin-left: auto;
   width: 120px; /* Set a fixed width */
   height: 40px; /* Set a fixed height */

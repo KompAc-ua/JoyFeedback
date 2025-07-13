@@ -61,67 +61,67 @@ const fftSize = 128;
     // console.log(bars);
 
     function drawPeakGraph(peakVolume) {
-    const multiplier = Number(document.getElementById("multiplier").value) || 1;
-    const scaledPeak = peakVolume * multiplier;
-    const scaledMax = maxPeak * multiplier;
+        const multiplier = Number(document.getElementById("multiplier").value) || 1;
+        const scaledPeak = peakVolume * multiplier;
+        const scaledMax = maxPeak * multiplier;
 
-    // Очищаем peakCanvas
-    peakCtx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-    peakCtx.fillRect(0, 0, peakCanvas.width, peakCanvas.height);
+        // Очищаем peakCanvas
+        peakCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        peakCtx.fillRect(0, 0, peakCanvas.width, peakCanvas.height);
 
-    // Вертикальная шкала от 0 до 255 (без учета multiplier)
-    peakCtx.fillStyle = 'white';
-    peakCtx.font = '10px Arial';
-    peakCtx.textAlign = 'right';
-    peakCtx.textBaseline = 'middle';
+        // Вертикальная шкала от 0 до 255 (без учета multiplier)
+        peakCtx.fillStyle = 'white';
+        peakCtx.font = '10px Arial';
+        peakCtx.textAlign = 'right';
+        peakCtx.textBaseline = 'middle';
 
-    const scaleValues = [0, 64, 128, 192, 255];
-    const graphHeight = peakCanvas.height - 20;
-    const graphY = 10;
+        const scaleValues = [0, 64, 128, 192, 255];
+        const graphHeight = peakCanvas.height - 20;
+        const graphY = 10;
 
-    scaleValues.forEach(value => {
-        const y = graphY + graphHeight - (value / 255) * graphHeight;
-        peakCtx.fillText(value.toFixed(0), 25, y);
-        peakCtx.beginPath();
-        peakCtx.moveTo(30, y);
-        peakCtx.lineTo(35, y);
-        peakCtx.strokeStyle = 'gray';
-        peakCtx.stroke();
-    });
+        scaleValues.forEach(value => {
+            const y = graphY + graphHeight - (value / 255) * graphHeight;
+            peakCtx.fillText(value.toFixed(0), 25, y);
+            peakCtx.beginPath();
+            peakCtx.moveTo(30, y);
+            peakCtx.lineTo(35, y);
+            peakCtx.strokeStyle = 'gray';
+            peakCtx.stroke();
+        });
 
-    // Горизонтальная шкала
-    peakCtx.textAlign = 'center';
-    for (let x = 50; x < peakCanvas.width; x += 50) {
-        peakCtx.fillText(`${x / 50}s`, x, peakCanvas.height - 5);
-        peakCtx.beginPath();
-        peakCtx.moveTo(x, graphY + graphHeight);
-        peakCtx.lineTo(x, graphY + graphHeight + 5);
-        peakCtx.stroke();
-    }
-
-    // График пиковой громкости (масштабируем значения, но не шкалу)
-    peakCtx.beginPath();
-    peakCtx.strokeStyle = 'cyan';
-    peakCtx.lineWidth = 2;
-
-    for (let i = 0; i < peakHistory.length; i++) {
-        const x = i + 35;
-        const scaledValue = peakHistory[i] * 255 * multiplier;
-        const y = graphY + graphHeight - (scaledValue / 255) * graphHeight;
-        if (i === 0) {
-            peakCtx.moveTo(x, y);
-        } else {
-            peakCtx.lineTo(x, y);
+        // Горизонтальная шкала
+        peakCtx.textAlign = 'center';
+        for (let x = 50; x < peakCanvas.width; x += 50) {
+            peakCtx.fillText(`${x / 50}s`, x, peakCanvas.height - 5);
+            peakCtx.beginPath();
+            peakCtx.moveTo(x, graphY + graphHeight);
+            peakCtx.lineTo(x, graphY + graphHeight + 5);
+            peakCtx.stroke();
         }
-    }
-    peakCtx.stroke();
 
-    // Текущая и максимальная громкость
-    peakCtx.fillStyle = 'yellow';
-    peakCtx.textAlign = 'right';
-    peakCtx.textBaseline = 'top';
-    peakCtx.fillText(`Peak: ${(scaledPeak * 255).toFixed(0)}`, peakCanvas.width - 5, 2);
-    peakCtx.fillText(`Max: ${(scaledMax * 255).toFixed(0)}`, peakCanvas.width - 5, 16);
+        // График пиковой громкости (масштабируем значения, но не шкалу)
+        peakCtx.beginPath();
+        peakCtx.strokeStyle = 'red'; // Changed from 'cyan' to 'red'
+        peakCtx.lineWidth = 0.8; // Increased from 2 to 3 for better readability
+
+        for (let i = 0; i < peakHistory.length; i++) {
+            const x = i + 35;
+            const scaledValue = peakHistory[i] * 255 * multiplier;
+            const y = graphY + graphHeight - (scaledValue / 255) * graphHeight;
+            if (i === 0) {
+                peakCtx.moveTo(x, y);
+            } else {
+                peakCtx.lineTo(x, y);
+            }
+        }
+        peakCtx.stroke();
+
+        // Текущая и максимальная громкость
+        peakCtx.fillStyle = 'yellow';
+        peakCtx.textAlign = 'right';
+        peakCtx.textBaseline = 'top';
+        peakCtx.fillText(`Peak: ${(scaledPeak * 255).toFixed(0)}`, peakCanvas.width - 5, 2);
+        peakCtx.fillText(`Max: ${(scaledMax * 255).toFixed(0)}`, peakCanvas.width - 5, 16);
 }
 
    function animate(){
@@ -158,9 +158,9 @@ const fftSize = 128;
             // Рисуем график пиковой громкости
             drawPeakGraph(peakVolume);
 
-            if(peakVolume > 0.05) {
+            if(peakVolume > 0.05 && document.getElementById("mVibro").style.backgroundColor != "red") {
                 // console.log(`Peak Volume: ${peakVolume.toFixed(2)}, Average Volume: ${vol.toFixed(2)}`);
-                if (document.getElementById("gamepadcheckbox").checked == true) vibro(peakVolume.toFixed(2), vol.toFixed(2), 200);
+                if (document.getElementById("gamepadcheckbox").checked == true) gamepadVibro(peakVolume.toFixed(2), vol.toFixed(2), 200);
                 
                 if (document.getElementById("serialportcheckbox").checked == true) {
                     if(document.getElementById('manualvolt').value == 0) writeInPortChange(peakVolume.toFixed(2)*255);

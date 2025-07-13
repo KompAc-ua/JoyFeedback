@@ -17,7 +17,7 @@
         
         <div>
           <button id="mVibro">Manual Vibro</button>
-          <button id="StopmVibro">StopmVibro</button>
+          <button id="stopmVibro">StopmVibro</button>
         </div>
         
         <div>
@@ -28,15 +28,16 @@
           <option value="4">Strong</option>
           <option value="5">Very Strong</option>
         </select>
-          <input type="range" min="0" max="255" step="1" value="0" id="manualvolt"> 
+          <input type="range" min="0" max="255" step="1" value="0" id="manualvolt" title="Manual Volume"> 
           <span id="showmanualvolt">0</span>
         </div>
+        <div id="controls"></div>
           
           <div class="left-aligned">
             <div class="bordered-div">
               <input type="checkbox" id="gamepadcheckbox" name="Gamepad" value="yes" title="Press a button on the gamepad">
               <label for="gamepadcheckbox"  title="Press a button on the gamepad">Gamepad</label>
-              <button id="vibro">Vibro</button>
+              <button id="gamepadVibro">Vibro</button>
             </div>
           
             <div class="bordered-div">

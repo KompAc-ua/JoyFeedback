@@ -13,7 +13,7 @@ window.addEventListener("gamepadconnected", (event) => {
     console.log(event.gamepad);
   });
   
-function vibro(weak, strong, durationValue) {
+function gamepadVibro(weak, strong, durationValue) {
   weak = weak * multiplier;
   strong = strong * multiplier;
   if (weak > 1.0){
@@ -63,7 +63,7 @@ const changeMultiplier = async (e)=>{
   // console.log("Change multiplier: ",multiplier);
 }
 
-document.querySelector('#vibro').addEventListener('click', e => vibro(1.0, 1.0, 200));
+document.querySelector('#gamepadVibro').addEventListener('click', e => gamepadVibro(1.0, 1.0, 200));
 document.querySelector('#multiplier').addEventListener('change', e=>{changeMultiplier(e)}); //Work with changes multiplier
 
 // Poll for gamepad state to handle already-connected gamepads
