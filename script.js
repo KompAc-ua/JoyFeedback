@@ -145,6 +145,8 @@ function stopmVibro (){
         worker2.terminate();
         worker2 = null; // Reset the worker variable
         document.getElementById("mVibro").style.backgroundColor = ""; // Reset button color
+        document.getElementById("manualvolt").value = 0;
+        manualVolt();
         removeSliders(); // Remove sliders
     }
     
