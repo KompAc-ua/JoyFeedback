@@ -1,8 +1,8 @@
 function main(){
-    const canvas = document.getElementById('myCanvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = 256;
-    canvas.height = 128;
+    const spectrumCanvas = document.getElementById('soundSpectrum');
+    const spectrumCtx = spectrumCanvas.getContext('2d');
+    spectrumCanvas.width = 256;
+    spectrumCanvas.height = 128;
 
     // Canvas для графика пиковой громкости
     const peakCanvas = document.getElementById('peakCanvas');
@@ -39,13 +39,13 @@ const fftSize = 128;
     const microphone = new Microphone(fftSize); //initialization microphone
     // console.log(microphone);
     let bars = [];
-    let barWidth = canvas.width/(fftSize/2);
+    let barWidth = spectrumCanvas.width/(fftSize/2);
 
     // Массив для хранения истории пиковой громкости
     const peakHistory = [];
-    const maxHistoryPoints = canvas.width; // Количество точек на графике
+    const maxHistoryPoints = spectrumCanvas.width; // Количество точек на графике
     const graphHeight = 30; // Высота области графика
-    const graphY = canvas.height - graphHeight; // Положение графика
+    const graphY = spectrumCanvas.height - graphHeight; // Положение графика
     let maxPeak = 0; // Максимальный пик за последние несколько кадров
     let frameCounter = 0; // Счётчик кадров для обновления maxPeak
     const maxPeakUpdateInterval = 10; // Обновлять maxPeak каждые 10 кадров
@@ -53,7 +53,7 @@ const fftSize = 128;
     function createBars(){
         for(let i = 0; i < (fftSize/2); i++){
             let color = 'hsl(' + i * 1 + ', 100%, 50%)';
-            bars.push(new Bar(i * barWidth, canvas.height, canvas.width/fftSize, canvas.height, color))
+            bars.push(new Bar(i * barWidth, spectrumCanvas.height, spectrumCanvas.width/fftSize, spectrumCanvas.height, color))
         }
     }
     
@@ -126,7 +126,7 @@ const fftSize = 128;
 
    function animate(){
         if(microphone.initialized){
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            spectrumCtx.clearRect(0, 0, spectrumCanvas.width, spectrumCanvas.height);
             // console.log('animate');
             //generates audio samples from microphone
             //animate bars based on microphone data
@@ -151,7 +151,7 @@ const fftSize = 128;
 
             bars.forEach(function(bar, i){
                 bar.update(samples[i]);
-                bar.draw(ctx);
+                bar.draw(spectrumCtx);
                 // console.log(samples[i]);
             });
 
