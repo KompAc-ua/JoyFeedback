@@ -12,14 +12,14 @@ body {
 }
 
 /* Заголовок */
-h1, div:first-child {
+/* h1, div:first-child {
     text-align: center;
     font-size: 24px;
     margin-bottom: 20px;
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #00ccff;
-}
+} */
 
 /* Стили для div (по умолчанию центрирование) */
 div {
@@ -50,6 +50,13 @@ div.left-aligned > div {
     gap: 5px; /* Отступ между чекбоксом и меткой */
     width: 100%; /* Занимает всю ширину контейнера */
     justify-content: flex-start; /* Убедимся, что чекбокс и метка начинаются слева */
+    
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #00ccff;
 }
 
 /* Стили для кнопок */
@@ -258,4 +265,31 @@ canvas {
   padding: 10px;
   box-sizing: border-box;
   flex-wrap: nowrap; /* Запрещаем перенос элементов на новую строку */
+}
+.joy-title {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 24px;           /* подбери под себя */
+  font-weight: 800;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  
+  background: linear-gradient(
+    90deg,
+    #ff3366, #ffcc33, #33ff99, #33ccff, #cc33ff, #ff3366
+  );
+  background-size: 300% 300%;   /* важно для плавного цикла */
+  
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;           /* fallback */
+  
+  animation: rainbowFlow 8s linear infinite;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+@keyframes rainbowFlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }

@@ -188,7 +188,7 @@ function createSliders() {
     const intervalSlider = document.createElement("input");
     intervalSlider.type = "range";
     intervalSlider.min = "10";
-    intervalSlider.max = "1000";
+    intervalSlider.max = "10000";
     intervalSlider.step = "10";
     intervalSlider.value = "1000";
     intervalSlider.id = "interval";

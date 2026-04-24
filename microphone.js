@@ -1,39 +1,47 @@
 class Microphone {
-    constructor(fftSize){
+    constructor(fftSize = 2048) {
         this.initialized = false;
-        navigator.mediaDevices.getUserMedia({audio:true})
-        .then(function(stream){
-            this.audioContext = new AudioContext();
-            this.microphone = this.audioContext.createMediaStreamSource(stream);
-            this.analyser = this.audioContext.createAnalyser();
-            this.analyser.fftSize = fftSize;
-            const bufferLenght = this.analyser.frequencyBinCount;
-            this.dataArray = new Uint8Array(bufferLenght);
-            this.microphone.connect(this.analyser);
-            this.initialized = true;
-        }.bind(this)).catch(function(err){
-            alert(err);
-        });
+        this.fftSize = fftSize;
+
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                this.audioContext = new AudioContext();
+                this.microphone = this.audioContext.createMediaStreamSource(stream);
+                this.analyser = this.audioContext.createAnalyser();
+                this.analyser.fftSize = this.fftSize;
+                this.analyser.smoothingTimeConstant = 0.82; // чуть мягче
+
+                this.bufferLength = this.analyser.frequencyBinCount;
+                this.dataArray = new Uint8Array(this.bufferLength); // ← для frequency data
+                
+                this.microphone.connect(this.analyser);
+                this.initialized = true;
+            })
+            .catch(err => {
+                console.error("Микрофон не доступен:", err);
+                alert("Не удалось получить доступ к микрофону: " + err.message);
+            });
     }
 
-    getSamples(){
+    getSamples() {
+        if (!this.initialized) return new Array(this.bufferLength).fill(0);
+        
+        this.analyser.getByteFrequencyData(this.dataArray);
+        // Возвращаем копию массива частот (0..255)
+        return [...this.dataArray];
+    }
+
+    getVolume() {
+        if (!this.initialized) return new Array(this.bufferLength).fill(0);
+        
         this.analyser.getByteTimeDomainData(this.dataArray);
         let normSamples = [...this.dataArray].map(e => e/128 - 1);
         // console.log(normSamples);
         return normSamples;
     }
 
-    getVolume(){
-        this.analyser.getByteTimeDomainData(this.dataArray);
-        let normSamples = [...this.dataArray].map(e => e/128 - 1);
-        let sum = 0;
-        for (let i = 0; i < normSamples.length; i++){
-            sum += normSamples[i] * normSamples[i];
-        }
-        let volume = Math.sqrt(sum / normSamples.length);
-        // console.log(volume);
-        return volume;
+    // Полезный геттер
+    get sampleRate() {
+        return this.audioContext?.sampleRate || 44100;
     }
 }
-// const microphone = new Microphone();
-// // console.log(microphone);

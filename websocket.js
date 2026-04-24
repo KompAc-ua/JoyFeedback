@@ -13,7 +13,7 @@ function initWebSocket() {
     if (!document.getElementById("wifi").checked) return;
 
     // Создаём новое WebSocket соединение по адресу сервера
-    webSocket = new WebSocket('wss://192.168.178.33/ws');
+    webSocket = new WebSocket('wss://esp32-s3.local/ws');
 
     // Обработчик успешного подключения
     webSocket.onopen = () => {
@@ -45,7 +45,7 @@ function sendRequest(volume) {
 
     // Получаем множитель из поля ввода, если оно пустое или некорректное — используем 1
     const multiplier = Number(document.getElementById("multiplier").value) || 1;
-    let dataToSend = Math.round(volume) * multiplier;
+    let dataToSend = Math.round(volume * multiplier);
 
     // Если задано ручное значение напряжения (manualvolt) — используем его
     if (Number(document.getElementById('manualvolt').value) === 0) {
