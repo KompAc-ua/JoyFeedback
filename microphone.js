@@ -3,7 +3,16 @@ class Microphone {
         this.initialized = false;
         this.fftSize = fftSize;
 
-        navigator.mediaDevices.getUserMedia({ audio: true })
+        // Отключаем встроенную обработку WebRTC на уровне захвата
+        const constraints = {
+            audio: {
+                echoCancellation: false,    // Отключает эхоподавление
+                noiseSuppression: false,    // Отключает шумоподавление (иначе срезает частоты)
+                autoGainControl: true,     // Отключает авторегулировку уровня
+            }
+        };
+
+        navigator.mediaDevices.getUserMedia(constraints)
             .then(stream => {
                 this.audioContext = new AudioContext();
                 this.microphone = this.audioContext.createMediaStreamSource(stream);
