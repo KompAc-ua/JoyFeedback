@@ -242,4 +242,4 @@ document.querySelector('#stop').addEventListener('click', e=>stopRec(e));
 document.querySelector('#device').addEventListener('change', e=>{changeAudioInput(e)});
 document.querySelector('#mVibro').addEventListener('click', e=>startmVibro(e));
 document.querySelector('#stopmVibro').addEventListener('click', e=>stopmVibro(e));
-document.querySelector('#manualvolt').addEventListener('change', e=>manualVolt(e));
+document.querySelector('#manualvolt').addEventListener('input', e=>manualVolt(e));

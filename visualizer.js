@@ -268,8 +268,8 @@ function main() {
                 if (Number(document.getElementById('manualvolt')?.value) === 0) {
                     const multiplier = Number(document.getElementById("multiplier")?.value) || 1;
                     let peakVolumeToSend = Math.round(peakVolume * 255 * multiplier);
-                    if (peakVolumeToSend < 100) peakVolumeToSend = 100;
-
+                    if (peakVolumeToSend < 80) peakVolumeToSend = 80;
+                    
                     if (peakVolumeToSend < 15) {
                         sendRequestJson(peakVolumeToSend, peakVolumeToSend, 0);
                     } else {

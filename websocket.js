@@ -51,7 +51,7 @@ function sendRequest(volume) {
     if (Number(document.getElementById('manualvolt').value) === 0) {
         // Ограничиваем значение в диапазоне [90, 255]
         if (dataToSend > 255) dataToSend = 255;
-        if (dataToSend < 100) dataToSend = 100;
+        if (dataToSend < 80) dataToSend = 80;
     } else {
         dataToSend = Number(document.getElementById('manualvolt').value);
     }
@@ -78,7 +78,7 @@ function sendRequestJson(led, motor1, motor2) {
         webSocket.send(JSON.stringify(jsonDataToSend));
         document.getElementById('showTextVolume').innerText = `Sent JSON: ${JSON.stringify(jsonDataToSend)}`;
     } else {
-        console.log("WebSocket not connected");
+        // console.log("WebSocket not connected");
         document.getElementById('showTextVolume').innerText = "WebSocket not connected";
     }
 }
