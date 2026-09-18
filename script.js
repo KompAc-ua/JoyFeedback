@@ -241,9 +241,97 @@ function removeSliders() {
     }
 }
 
+// Глобальный Map для хранения данных о каждом вынесенном canvas
+const activePipWindows = new Map();
+
+/**
+ * Универсальная функция переключения PiP для любого canvas
+ * @param {HTMLCanvasElement} canvasElement 
+ */
+async function toggleCanvasPip(canvasElement) {
+  // 1. Проверка поддержки API
+  if (!('documentPictureInPicture' in window)) {
+    alert('Ваш браузер не поддерживает Document Picture-in-Picture API');
+    return;
+  }
+
+  // 2. Если для ЭТОГО canvas окно УЖЕ открыто — закрываем его
+  if (activePipWindows.has(canvasElement)) {
+    const { pipWindow } = activePipWindows.get(canvasElement);
+    pipWindow.close();
+    return;
+  }
+
+  try {
+    // Сохраняем место canvas в DOM, чтобы вернуть его ровно туда, откуда взяли
+    const parent = canvasElement.parentNode;
+    const nextSibling = canvasElement.nextSibling;
+
+    // 3. Запрашиваем окно
+    const pipWindow = await window.documentPictureInPicture.requestWindow({
+      width: canvasElement.width || canvasElement.clientWidth,
+      height: canvasElement.height || canvasElement.clientHeight,
+    });
+
+    // 4. Скопировать стили текущей страницы в PiP-окно
+    [...document.styleSheets].forEach((styleSheet) => {
+      try {
+        const cssRules = [...styleSheet.cssRules].map(r => r.cssText).join('');
+        const style = document.createElement('style');
+        style.textContent = cssRules;
+        pipWindow.document.head.appendChild(style);
+      } catch (e) {
+        // Пропускаем внешние/CORS стили
+      }
+    });
+
+    // 5. Убираем внешние поля у документа в PiP-окне
+    pipWindow.document.body.style.margin = '0';
+    pipWindow.document.body.style.padding = '0';
+    pipWindow.document.body.style.overflow = 'hidden';
+
+    // 6. Запоминаем текущие inline-стили canvas и растягиваем его в новое окно
+    const originalStyle = canvasElement.getAttribute('style') || '';
+    canvasElement.style.width = '100%';
+    canvasElement.style.height = '100%';
+    canvasElement.style.display = 'block';
+
+    // Сохраняем запись о состоянии в Map
+    activePipWindows.set(canvasElement, { pipWindow, parent, nextSibling, originalStyle });
+
+    // 7. Переносим canvas в PiP-окно
+    pipWindow.document.body.appendChild(canvasElement);
+
+    // 8. Возврат canvas на исходное место при закрытии окна
+    pipWindow.addEventListener('pagehide', () => {
+      // Восстанавливаем оригинальные стили canvas
+      if (originalStyle) {
+        canvasElement.setAttribute('style', originalStyle);
+      } else {
+        canvasElement.removeAttribute('style');
+      }
+
+      // Возвращаем в точную позицию DOM (учитывая соседние элементы)
+      if (nextSibling && parent.contains(nextSibling)) {
+        parent.insertBefore(canvasElement, nextSibling);
+      } else {
+        parent.appendChild(canvasElement);
+      }
+
+      // Удаляем из реестра активных окон
+      activePipWindows.delete(canvasElement);
+    });
+
+  } catch (err) {
+    console.error('Не удалось открыть Picture-in-Picture:', err);
+  }
+}
+
 document.querySelector('#record').addEventListener('click', e=>getMicStream(e));
 document.querySelector('#stop').addEventListener('click', e=>stopRec(e));
 document.querySelector('#device').addEventListener('change', e=>{changeAudioInput(e)});
 document.querySelector('#mVibro').addEventListener('click', e=>startmVibro(e));
 document.querySelector('#stopmVibro').addEventListener('click', e=>stopmVibro(e));
 document.querySelector('#manualvolt').addEventListener('input', e=>manualVolt(e));
+document.getElementById('peakCanvas').addEventListener('dblclick', (e)=>toggleCanvasPip(e.currentTarget));
+document.getElementById('soundSpectrum').addEventListener('dblclick', (e)=>toggleCanvasPip(e.currentTarget));
