@@ -9,72 +9,70 @@
 <body onload="main()">
     <div class="joy-title">JoyFeedback</div>
     <div>
-        
+      <div id="topbuttons" class="top">
         <button id="record">Record</button>
         <button id="stop">Stop</button>
         <select id="device"></select>
-        
-        <div>
-          <button id="mVibro">Manual Vibro</button>
-          <button id="stopmVibro">StopmVibro</button>
-        </div>
-        
-        <div>
+        <button id="mVibro">Manual Vibro</button>
+        <button id="stopmVibro">StopmVibro</button>
+        <div class="slider-row">
           <select id="multiplier">
-          <option value="1">Default</option>
-          <option value="1.3">Light</option>
-          <option value="1.5">Medium</option>
-          <option value="2">Strong</option>
-          <option value="3">Very Strong</option>
-        </select>
+            <option value="1">Default</option>
+            <option value="1.3">Light</option>
+            <option value="1.5">Medium</option>
+            <option value="2">Strong</option>
+            <option value="3">Very Strong</option>
+          </select>
           <input type="range" min="0" max="255" step="1" value="0" id="manualvolt" title="Manual Volume"> 
           <span id="showmanualvolt">0</span>
         </div>
         <div id="controls"></div>
+      </div>  
+
+      <div class="left-aligned">
+        <div class="bordered-div">
+          <input type="checkbox" id="gamepadcheckbox" name="Gamepad" value="yes" title="Press a button on the gamepad">
+          <label for="gamepadcheckbox"  title="Press a button on the gamepad">Gamepad</label>
+          <span id="gamepadStatus" class="gamepad-status" role="status" aria-live="polite"></span>
+          <button id="gamepadVibro">Vibro</button>
+        </div>
           
-          <div class="left-aligned">
-            <div class="bordered-div">
-              <input type="checkbox" id="gamepadcheckbox" name="Gamepad" value="yes" title="Press a button on the gamepad">
-              <label for="gamepadcheckbox"  title="Press a button on the gamepad">Gamepad</label>
-              <button id="gamepadVibro">Vibro</button>
-            </div>
-          
-            <div class="bordered-div">
-              <input type="checkbox" id="serialportcheckbox" name="SerialPort" value="yes">
-              <label for="serialportcheckbox">SerialPort</label>
-              <select id="OffOn">
-                <option value="0">Off</option>
-                <option value="255">On</option>
-              </select>
-              <input type="text" id="baudrate" list="baudList" onclick="this.value = '' "onchange="localStorage.baudrate = this.value" value="115200">
-              <datalist id="baudList">
-                <option value="110">110</option>
-                <option value="300">300</option>
-                <option value="600">600</option>
-                <option value="1200">1200</option>
-                <option value="2400">2400</option>
-                <option value="4800">4800</option>
-                <option value="9600">9600</option>
-                <option value="14400">14400</option>
-                <option value="19200">19200</option>
-                <option value="38400">38400</option>
-                <option value="57600">57600</option>
-                <option value="115200">115200</option>
-                <option value="128000">128000</option>
-                <option value="256000">256000</option>
-              </datalist>
-              <button id="SelectPort">Select Port</button>
-            </div>
+        <div class="bordered-div">
+          <input type="checkbox" id="serialportcheckbox" name="SerialPort" value="yes">
+          <label for="serialportcheckbox">SerialPort</label>
+          <select id="OffOn">
+            <option value="0">Off</option>
+            <option value="255">On</option>
+          </select>
+          <input type="text" id="baudrate" list="baudList" onclick="this.value = '' "onchange="localStorage.baudrate = this.value" value="115200">
+          <datalist id="baudList">
+            <option value="110">110</option>
+            <option value="300">300</option>
+            <option value="600">600</option>
+            <option value="1200">1200</option>
+            <option value="2400">2400</option>
+            <option value="4800">4800</option>
+            <option value="9600">9600</option>
+            <option value="14400">14400</option>
+            <option value="19200">19200</option>
+            <option value="38400">38400</option>
+            <option value="57600">57600</option>
+            <option value="115200">115200</option>
+            <option value="128000">128000</option>
+            <option value="256000">256000</option>
+          </datalist>
+          <button id="SelectPort">Select Port</button>
+        </div>
             
-            <div class="bordered-div">
-              <input type="checkbox" id="wifi" name="WiFi" value="yes">
-              <label for="wifi">WiFi</label>
-              <button id="sendrequest">Send Request</button>
-            </div>
-            
+          <div class="bordered-div">
+            <input type="checkbox" id="wifi" name="WiFi" value="yes">
+            <label for="wifi">WiFi</label>
+            <button id="sendrequest">Send Request</button>
           </div>
+            
+        </div>
           
-      </div>
+    </div>
       
       <div>
         <canvas id='soundSpectrum' title="Sound Spectrum"></canvas>

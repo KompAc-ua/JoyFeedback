@@ -1,4 +1,4 @@
-/* Общие стили */
+﻿/* Общие стили */
 body {
     font-family: 'Arial', sans-serif;
     background-color: #1a1a1a;
@@ -31,6 +31,14 @@ div {
     gap: 10px;
     justify-content: center;
     align-items: center;
+}
+div.top{
+    width: 320px;
+    display: flex;
+}
+div.top > button{
+    flex: 1;
+    max-width: none;
 }
 
 /* Стили для div с левым выравниванием */
@@ -69,11 +77,15 @@ button {
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s, transform 0.2s;
+    width: 100%;
+    max-width: 110px;
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.674);
 }
 
 button:hover {
     background-color: #0099cc;
     transform: scale(1.05);
+    text-shadow: 0 3px 4px rgba(0, 0, 0, 0.674);
 }
 
 button:active {
@@ -90,6 +102,9 @@ select {
     font-size: 14px;
     cursor: pointer;
     transition: border-color 0.3s;
+}
+#device{
+    width: 100%;
 }
 
 select:focus {
@@ -201,6 +216,33 @@ canvas {
     /* background-color: aqua; */
 }
 
+.slider-row {
+    display: grid;
+    grid-template-columns: 100px 170px 5ch;
+    justify-content: start;
+    gap: 4px;
+}
+
+.slider-row > input[type="range"] {
+    grid-column: 2;
+    width: 150px;
+    margin-left: 20px;
+}
+
+.slider-row > span {
+    grid-column: 3;
+    margin-left: 0;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.slider-row > select {
+    grid-column: 1;
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
+
 /* Адаптивность */
 @media (max-width: 600px) {
     div {
@@ -217,10 +259,15 @@ canvas {
         width: 100%;
     }
 
-    button, select {
+    .slider-row {
+        grid-template-columns: 100px 170px 5ch;
+    }
+
+    button {
         width: 100%;
         max-width: 200px;
     }
+
     input[type="text"]{
         width: 65px;
     }
@@ -243,6 +290,24 @@ canvas {
   padding: 8px; /* Optional: Adjust padding for better text fit */
   box-sizing: border-box; /* Ensures padding is included in width/height */
   text-align: center; /* Center text inside buttons */
+}
+#gamepadVibro {
+  margin-left: 0;
+}
+.gamepad-status {
+  color: #66e0ff;
+  font-size: 14px;
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+}
+.gamepad-status.visible {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
 }
 #baudrate{
     margin-left: 0;

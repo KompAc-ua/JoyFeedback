@@ -1,36 +1,76 @@
 let initializationGamepad = 0;
 let gp = null;
-let multiplier = 1;
+let gamepadStatusTimeout = null;
+let gamepadStatusTransitionTimeout = null;
+
+const gamepadStatus = document.querySelector("#gamepadStatus");
+
+function clearGamepadStatusTimers() {
+  if (gamepadStatusTimeout) {
+    clearTimeout(gamepadStatusTimeout);
+    gamepadStatusTimeout = null;
+  }
+  if (gamepadStatusTransitionTimeout) {
+    clearTimeout(gamepadStatusTransitionTimeout);
+    gamepadStatusTransitionTimeout = null;
+  }
+}
+
+function showGamepadStatus(message, hideAfterDelay = false, nextMessage = null) {
+  if (!gamepadStatus) {
+    return;
+  }
+
+  clearGamepadStatusTimers();
+
+  gamepadStatus.textContent = message;
+  gamepadStatus.classList.add("visible");
+
+  if (hideAfterDelay) {
+    gamepadStatusTimeout = setTimeout(() => {
+      gamepadStatus.classList.remove("visible");
+      gamepadStatusTimeout = null;
+
+      if (nextMessage) {
+        gamepadStatusTransitionTimeout = setTimeout(() => {
+          gamepadStatus.textContent = nextMessage;
+          gamepadStatus.classList.add("visible");
+          gamepadStatusTransitionTimeout = null;
+        }, 500);
+      }
+    }, 2000);
+  }
+}
 
 window.addEventListener("gamepadconnected", (event) => {
     initializationGamepad = 1;
+    showGamepadStatus("Gamepad connected", true, event.gamepad.id);
     console.log("A gamepad connected:");
     console.log(event.gamepad);
     });
   window.addEventListener("gamepaddisconnected", (event) => {
     initializationGamepad = 0;
+    showGamepadStatus("Gamepad disconnected", true);
     console.log("A gamepad disconnected:");
     console.log(event.gamepad);
   });
   
 function gamepadVibro(weak, strong, durationValue) {
-  weak = weak * multiplier;
-  strong = strong * multiplier;
   if (weak > 1.0){
     weak = 1.0;
   }
   if (strong > 1.0){
     strong = 1.0;
   }
-  // console.log("weak: ",weak, "strong: ",strong, "multiplier: ",multiplier);
+  // console.log("weak: ",weak, "strong: ",strong);
     if(initializationGamepad === 1){
         const gamepad = navigator.getGamepads().find(gp => gp && gp.connected);
         if (!gamepad) {
+          showGamepadStatus("Gamepad is not connected", true);
           console.log("Gamepad not connected or not detected");
           return;
         }
         try{
-
         if(gamepad.vibrationActuator && gamepad.vibrationActuator.type === "dual-rumble") {
           // Chromium-based browsers (Chrome, Edge, Opera, Yandex)
           gamepad.vibrationActuator.playEffect("dual-rumble", 
@@ -50,28 +90,10 @@ function gamepadVibro(weak, strong, durationValue) {
       } catch (error) {console.error("Vibration error:", error);
         alert("Vibration error: " + error.message);
       }
-      
-        
-        // console.log("vibro");
-    } else console.log("Gamepad not connected");
-      
+    } else {
+      showGamepadStatus("Gamepad is not connected", true);
+      console.log("Gamepad not connected");
+    }
 };
 
-const changeMultiplier = async (e)=>{
-  const multiplierEl = document.querySelector('#multiplier');
-  multiplier = multiplierEl.value;
-  // console.log("Change multiplier: ",multiplier);
-}
-
 document.querySelector('#gamepadVibro').addEventListener('click', e => gamepadVibro(1.0, 1.0, 200));
-document.querySelector('#multiplier').addEventListener('change', e=>{changeMultiplier(e)}); //Work with changes multiplier
-
-// Poll for gamepad state to handle already-connected gamepads
-// function checkGamepad() {
-//   const gamepad = navigator.getGamepads().find(gp => gp && gp.connected);
-//   initializationGamepad = gamepad ? 1 : 0;
-//   console.log("Gamepad connected:", initializationGamepad);
-// }
-
-// checkGamepad();
-// setInterval(checkGamepad, 1000); // Check every second

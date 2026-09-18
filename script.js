@@ -114,7 +114,9 @@ function startmVibro() {
     
     worker2.onmessage = () => {
             if (document.getElementById("gamepadcheckbox").checked == true){
-                gamepadVibro(1.0, 1.0, 1000);  
+                let motor1 = document.getElementById("manualvolt").value/255;
+                let motor2 = document.getElementById("manualvolt2").value/255;
+                gamepadVibro(motor1.toFixed(2), motor2.toFixed(2), 100);
             }
             if (document.getElementById("serialportcheckbox").checked == true) {
             
@@ -150,7 +152,7 @@ function stopmVibro (){
         removeSliders(); // Remove sliders
     }
     
-    console.log("Stop Vibro");
+    // console.log("Stop Vibro");
 }
 function manualVolt(){
     document.getElementById('showmanualvolt').innerText = document.getElementById('manualvolt').value;
@@ -163,6 +165,7 @@ function createSliders() {
 
     // Create interval slider and span
     const intervalContainer = document.createElement("div");
+    intervalContainer.className = "slider-row";
     // const intervalLabel = document.createElement("label");
     // intervalLabel.setAttribute("for", "interval");
     // intervalLabel.textContent = "Vibration Interval (ms): ";
@@ -182,6 +185,7 @@ function createSliders() {
 
     // Create manualvoltright slider and span
     const voltContainer = document.createElement("div");
+    voltContainer.className = "slider-row";
     const voltLabel = document.createElement("label");
     // voltLabel.textContent = "Manual Voltage: ";
 

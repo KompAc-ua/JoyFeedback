@@ -250,9 +250,17 @@ function main() {
         drawPeakGraph(peakVolume);
 
         // Внешние триггеры (VIBRO, SERIAL, WIFI)
+        const multiplier = Number(document.getElementById("multiplier")?.value) || 1;
         if (peakVolume > 0.05 && document.getElementById("mVibro")?.style.backgroundColor !== "red") {
             if (document.getElementById("gamepadcheckbox")?.checked === true) {
-                gamepadVibro(peakVolume.toFixed(2), vol.toFixed(2), 200);
+                if (Number(document.getElementById('manualvolt')?.value) === 0){
+                    gamepadVibro((peakVolume*multiplier).toFixed(2), (peakVolume*multiplier).toFixed(2), 200);
+                } else{
+                    const magnitude = Number(document.getElementById('manualvolt')?.value)/255;
+                    //console.log(magnitude.toFixed(2));
+                    gamepadVibro(magnitude.toFixed(2), magnitude.toFixed(2), 200);
+                }
+                
             }
 
             if (document.getElementById("serialportcheckbox")?.checked === true) {
@@ -266,7 +274,6 @@ function main() {
 
             if (document.getElementById("wifi")?.checked === true) {
                 if (Number(document.getElementById('manualvolt')?.value) === 0) {
-                    const multiplier = Number(document.getElementById("multiplier")?.value) || 1;
                     let peakVolumeToSend = Math.round(peakVolume * 255 * multiplier);
                     if (peakVolumeToSend < 80) peakVolumeToSend = 80;
                     
